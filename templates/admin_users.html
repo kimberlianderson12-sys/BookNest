@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Управление пользователями - BookNest{% endblock %}
+
+{% block content %}
+<div class="admin-page">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1>Управление пользователями</h1>
+        <a href="{{ url_for('admin_add_user') }}" class="btn btn-primary">Добавить пользователя</a>
+    </div>
+
+    <div class="search-filters" style="margin-bottom: 2rem;">
+        <form method="GET" class="filter-form">
+            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                <input type="text" name="search" class="search-input" placeholder="Поиск по имени, логину, email..." value="{{ search }}">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <select name="role" class="form-select">
+                    <option value="">Все роли</option>
+                    <option value="reader" {% if role_filter == 'reader' %}selected{% endif %}>Читатель</option>
+                    <option value="librarian" {% if role_filter == 'librarian' %}selected{% endif %}>Библиотекарь</option>
+                    <option value="admin" {% if role_filter == 'admin' %}selected{% endif %}>Администратор</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Поиск</button>
+            {% if search or role_filter %}
+            <a href="{{ url_for('admin_users') }}" class="btn btn-outline">Сбросить</a>
+            {% endif %}
+        </form>
+    </div>
+
+    {% if users %}
+    <div class="reservations-table" style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Логин</th>
+                    <th>ФИО</th>
+                    <th>Email</th>
+                    <th>Телефон</th>
+                    <th>Роль</th>
+                    <th>Лимит книг</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.full_name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.phone or '-' }}</td>
+                    <td>
+                        <span class="role-badge">{{ user.role }}</span>
+                    </td>
+                    <td>{{ user.max_books }}</td>
+                    <td>
+                        <a href="{{ url_for('admin_edit_user', username=user.username) }}" class="btn btn-sm btn-primary">Редактировать</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>Пользователи не найдены</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

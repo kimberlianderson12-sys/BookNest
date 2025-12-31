@@ -1,0 +1,57 @@
+@startuml
+title Диаграмма вариантов использования
+
+left to right direction
+
+rectangle "BookNest System" {
+  (Вход в систему) as login
+  (Просмотр книг) as view_books
+  (Поиск книг) as search_books
+  (Просмотр детальной информации) as view_details
+  (Бронирование книги) as reserve
+  (Мои бронирования) as my_reservations
+  (Отмена бронирования) as cancel
+  (Просмотр всех бронирований) as all_reservations
+  (Изменение статуса) as update_status
+  (Статистика) as statistics
+  (Управление пользователями) as manage_users
+  (Управление книгами) as manage_books
+  (Управление экземплярами) as manage_copies
+  (Расширенная статистика) as extended_stats
+}
+
+actor Reader as reader
+actor Librarian as librarian
+actor Admin as admin
+
+reader --> login
+reader --> view_books
+reader --> search_books
+reader --> view_details
+reader --> reserve
+reader --> my_reservations
+reader --> cancel
+reader --> statistics
+
+librarian --> login
+librarian --> view_books
+librarian --> search_books
+librarian --> view_details
+librarian --> all_reservations
+librarian --> update_status
+librarian --> statistics
+
+admin --> login
+admin --> view_books
+admin --> search_books
+admin --> view_details
+admin --> all_reservations
+admin --> update_status
+admin --> statistics
+admin --> manage_users
+admin --> manage_books
+admin --> manage_copies
+admin --> extended_stats
+
+@enduml
+

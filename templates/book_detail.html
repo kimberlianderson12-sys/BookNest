@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} - BookNest{% endblock %}
+
+{% block content %}
+<div class="book-detail">
+    <a href="{{ url_for('books') }}" class="back-link">← Назад к каталогу</a>
+    
+    <div class="book-detail-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h1 style="margin: 0;">{{ book.title }}</h1>
+        {% if session.role == 'admin' %}
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="{{ url_for('admin_edit_book', book_id=book.book_id) }}" class="btn btn-primary">Редактировать</a>
+            <a href="{{ url_for('admin_add_copy') }}" class="btn btn-outline">Добавить экземпляр</a>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="book-detail-content">
+        {% if book.image_path %}
+        <div class="book-detail-image-section">
+            <img src="{{ url_for('serve_image', filename=book.image_path.split('/')[-1]) }}" 
+                 alt="{{ book.title }}" 
+                 class="book-detail-image"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <div class="book-detail-image-placeholder" style="display: none;">
+                <span>📚</span>
+            </div>
+        </div>
+        {% else %}
+        <div class="book-detail-image-section">
+            <div class="book-detail-image-placeholder">
+                <span>📚</span>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="book-info-section">
+            <h2>Информация о книге</h2>
+            <dl class="info-list">
+                {% if book.isbn %}
+                <dt>ISBN:</dt>
+                <dd>{{ book.isbn }}</dd>
+                {% endif %}
+                
+                {% if book.publication_year %}
+                <dt>Год издания:</dt>
+                <dd>{{ book.publication_year }}</dd>
+                {% endif %}
+                
+                {% if book.publisher %}
+                <dt>Издательство:</dt>
+                <dd>{{ book.publisher }}</dd>
+                {% endif %}
+                
+                {% if book.pages %}
+                <dt>Страниц:</dt>
+                <dd>{{ book.pages }}</dd>
+                {% endif %}
+                
+                {% if book.language %}
+                <dt>Язык:</dt>
+                <dd>{{ book.language }}</dd>
+                {% endif %}
+            </dl>
+        </div>
+        
+        <div class="book-authors-section">
+            <h2>Авторы</h2>
+            <ul class="authors-list">
+                {% for author in authors %}
+                <li>
+                    <strong>{{ author[1] }} {{ author[2] }}</strong>
+                    {% if author[3] or author[4] %}
+                    ({% if author[3] %}{{ author[3] }}{% endif %}{% if author[3] and author[4] %} - {% endif %}{% if author[4] %}{{ author[4] }}{% endif %})
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="book-genres-section">
+            <h2>Жанры</h2>
+            <div class="genres-tags">
+                {% for genre in genres %}
+                <span class="genre-tag">{{ genre[1] }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        
+        {% if book.description %}
+        <div class="book-description-section">
+            <h2>Описание</h2>
+            <p>{{ book.description }}</p>
+        </div>
+        {% endif %}
+        
+        <div class="book-copies-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2 style="margin: 0;">Доступные экземпляры</h2>
+                {% if session.role == 'admin' %}
+                <a href="{{ url_for('admin_add_copy') }}?book_id={{ book.book_id }}" class="btn btn-sm btn-primary">Добавить экземпляр</a>
+                {% endif %}
+            </div>
+            {% if copies %}
+            <table class="copies-table">
+                <thead>
+                    <tr>
+                        <th>Инвентарный номер</th>
+                        <th>Состояние</th>
+                        <th>Местоположение</th>
+                        {% if session.role == 'reader' %}
+                        <th>Действие</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for copy in copies %}
+                    <tr>
+                        <td>{{ copy[1] }}</td>
+                        <td>
+                            {% if copy[2] == 'new' %}Новая
+                            {% elif copy[2] == 'good' %}Хорошее
+                            {% elif copy[2] == 'fair' %}Удовлетворительное
+                            {% elif copy[2] == 'poor' %}Плохое
+                            {% else %}{{ copy[2] }}
+                            {% endif %}
+                        </td>
+                        <td>{{ copy[4] or 'Не указано' }}</td>
+                        {% if session.role == 'reader' %}
+                        <td>
+                            <form method="POST" action="{{ url_for('reserve_book', copy_id=copy[0]) }}" style="display: inline;">
+                                <button type="submit" class="btn btn-primary btn-sm">Забронировать</button>
+                            </form>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="no-copies">Нет доступных экземпляров</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

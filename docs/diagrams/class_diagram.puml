@@ -1,0 +1,54 @@
+@startuml
+title Диаграмма классов: Структура системы BookNest
+
+class FlaskApplication {
+  - app: Flask
+  - db: Database
+  - IMAGES_DIR: Path
+  + index()
+  + login()
+  + logout()
+  + dashboard()
+  + books()
+  + book_detail()
+  + reserve_book()
+  + my_reservations()
+  + cancel_reservation()
+  + all_reservations()
+  + update_reservation_status()
+  + get_book_image_path()
+  + init_db()
+  + login_required()
+  + role_required()
+}
+
+class Database {
+  - host: str
+  - database: str
+  - user: str
+  - password: str
+  - conn: Connection
+  + __init__()
+  + connect()
+  + close()
+  + execute_query()
+  + execute_insert()
+  + get_id_by_name()
+}
+
+class PostgreSQL {
+  + users
+  + authors
+  + genres
+  + books
+  + book_authors
+  + book_genres
+  + book_copies
+  + reservations
+}
+
+FlaskApplication --> Database : использует
+Database --> PostgreSQL : работает с
+
+@enduml
+

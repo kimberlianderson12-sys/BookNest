@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Расширенная статистика - BookNest{% endblock %}
+
+{% block content %}
+<div class="admin-page">
+    <h1>Расширенная статистика</h1>
+    
+    <div class="stats-grid" style="margin-bottom: 2rem;">
+        <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-info">
+                <h3>{{ stats.total_books }}</h3>
+                <p>Всего книг</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">📖</div>
+            <div class="stat-info">
+                <h3>{{ stats.total_copies }}</h3>
+                <p>Всего экземпляров</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+                <h3>{{ stats.available_copies }}</h3>
+                <p>Доступно экземпляров</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+                <h3>{{ stats.total_users }}</h3>
+                <p>Всего пользователей</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">👤</div>
+            <div class="stat-info">
+                <h3>{{ stats.total_readers }}</h3>
+                <p>Читателей</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-info">
+                <h3>{{ stats.total_reservations }}</h3>
+                <p>Всего бронирований</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-info">
+                <h3>{{ stats.active_reservations }}</h3>
+                <p>Активных бронирований</p>
+            </div>
+        </div>
+    </div>
+    
+    {% if stats.popular_books %}
+    <div class="search-filters" style="margin-bottom: 2rem;">
+        <h2 style="margin-bottom: 1rem; color: #CF9D7B;">Популярные книги</h2>
+        <table class="reservations-table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Количество бронирований</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in stats.popular_books %}
+                <tr>
+                    <td>{{ book[1] }}</td>
+                    <td>{{ book[2] }}</td>
+                    <td><a href="{{ url_for('book_detail', book_id=book[0]) }}" class="btn btn-sm btn-primary">Просмотр</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if stats.genre_stats %}
+    <div class="search-filters" style="margin-bottom: 2rem;">
+        <h2 style="margin-bottom: 1rem; color: #CF9D7B;">Статистика по жанрам</h2>
+        <table class="reservations-table">
+            <thead>
+                <tr>
+                    <th>Жанр</th>
+                    <th>Количество книг</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for genre in stats.genre_stats %}
+                <tr>
+                    <td>{{ genre[0] }}</td>
+                    <td>{{ genre[1] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if stats.author_stats %}
+    <div class="search-filters" style="margin-bottom: 2rem;">
+        <h2 style="margin-bottom: 1rem; color: #CF9D7B;">Популярные авторы</h2>
+        <table class="reservations-table">
+            <thead>
+                <tr>
+                    <th>Автор</th>
+                    <th>Количество книг</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for author in stats.author_stats %}
+                <tr>
+                    <td>{{ author[0] }} {{ author[1] }}</td>
+                    <td>{{ author[2] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if stats.reservation_status %}
+    <div class="search-filters" style="margin-bottom: 2rem;">
+        <h2 style="margin-bottom: 1rem; color: #CF9D7B;">Статистика по статусам бронирований</h2>
+        <table class="reservations-table">
+            <thead>
+                <tr>
+                    <th>Статус</th>
+                    <th>Количество</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for status in stats.reservation_status %}
+                <tr>
+                    <td>
+                        {% if status[0] == 'reserved' %}Забронировано
+                        {% elif status[0] == 'issued' %}Выдано
+                        {% elif status[0] == 'returned' %}Возвращено
+                        {% elif status[0] == 'cancelled' %}Отменено
+                        {% else %}{{ status[0] }}{% endif %}
+                    </td>
+                    <td>{{ status[1] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    {% if stats.user_roles %}
+    <div class="search-filters">
+        <h2 style="margin-bottom: 1rem; color: #CF9D7B;">Статистика по ролям пользователей</h2>
+        <table class="reservations-table">
+            <thead>
+                <tr>
+                    <th>Роль</th>
+                    <th>Количество</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for role in stats.user_roles %}
+                <tr>
+                    <td>
+                        {% if role[0] == 'reader' %}Читатель
+                        {% elif role[0] == 'librarian' %}Библиотекарь
+                        {% elif role[0] == 'admin' %}Администратор
+                        {% else %}{{ role[0] }}{% endif %}
+                    </td>
+                    <td>{{ role[1] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

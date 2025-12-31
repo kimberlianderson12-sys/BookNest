@@ -1,0 +1,38 @@
+@startuml
+title Диаграмма последовательности: Бронирование книги
+
+actor Читатель
+participant "Браузер" as Browser
+participant "Flask App" as Flask
+participant "Database" as DB
+
+Читатель -> Browser: POST /login
+Browser -> Flask: POST /login
+Flask -> DB: SELECT users WHERE username
+DB --> Flask: result
+Flask --> Browser: 200 OK (сессия создана)
+Browser --> Читатель: Страница dashboard
+
+Читатель -> Browser: GET /books
+Browser -> Flask: GET /books
+Flask -> DB: SELECT books JOIN book_copies
+DB --> Flask: список книг
+Flask --> Browser: 200 OK (HTML)
+Browser --> Читатель: Страница с книгами
+
+Читатель -> Browser: POST /reserve/1
+Browser -> Flask: POST /reserve/1
+Flask -> DB: SELECT users (проверка лимита)
+DB --> Flask: max_books
+Flask -> DB: SELECT COUNT reservations (активные)
+DB --> Flask: количество активных
+Flask -> DB: SELECT book_copies (проверка доступности)
+DB --> Flask: status экземпляра
+Flask -> DB: INSERT reservations
+Flask -> DB: UPDATE book_copies (status='reserved')
+DB --> Flask: OK
+Flask --> Browser: 200 OK (редирект)
+Browser --> Читатель: Сообщение об успехе
+
+@enduml
+

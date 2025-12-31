@@ -1,0 +1,36 @@
+@startuml
+title Диаграмма состояний: Экземпляр книги и бронирование
+
+state "available" as available
+state "reserved" as reserved
+state "issued" as issued
+state "returned" as returned
+state "cancelled" as cancelled
+
+[*] --> available
+
+available --> reserved : Бронирование
+reserved --> issued : Выдача
+reserved --> cancelled : Отмена
+reserved --> available : Отмена бронирования
+issued --> returned : Возврат
+issued --> available : Отмена (возврат)
+returned --> [*]
+cancelled --> [*]
+
+note right of available
+  Экземпляр доступен
+  для бронирования
+end note
+
+note right of reserved
+  Экземпляр забронирован,
+  ожидает выдачи
+end note
+
+note right of issued
+  Экземпляр выдан читателю
+end note
+
+@enduml
+

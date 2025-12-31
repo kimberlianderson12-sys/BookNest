@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}{% if action == 'add' %}Добавление книги{% else %}Редактирование книги{% endif %} - BookNest{% endblock %}
+
+{% block content %}
+<div class="admin-page">
+    <h1>{% if action == 'add' %}Добавление книги{% else %}Редактирование книги{% endif %}</h1>
+    
+    <div class="login-card" style="max-width: 800px; margin: 0 auto;">
+        <form method="POST" class="login-form">
+            <div class="form-group">
+                <label for="title">Название *</label>
+                <input type="text" id="title" name="title" value="{% if action == 'edit' %}{{ book.title }}{% endif %}" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="isbn">ISBN</label>
+                    <input type="text" id="isbn" name="isbn" value="{% if action == 'edit' %}{{ book.isbn or '' }}{% endif %}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="publication_year">Год издания</label>
+                    <input type="number" id="publication_year" name="publication_year" value="{% if action == 'edit' %}{{ book.publication_year or '' }}{% endif %}" min="1000" max="2100">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="publisher">Издательство</label>
+                    <input type="text" id="publisher" name="publisher" value="{% if action == 'edit' %}{{ book.publisher or '' }}{% endif %}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="pages">Количество страниц</label>
+                    <input type="number" id="pages" name="pages" value="{% if action == 'edit' %}{{ book.pages or '' }}{% endif %}" min="1">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="language">Язык</label>
+                <input type="text" id="language" name="language" value="{% if action == 'edit' %}{{ book.language or 'Русский' }}{% else %}Русский{% endif %}">
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Описание</label>
+                <textarea id="description" name="description" rows="5" style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: 6px; background-color: rgba(58, 53, 52, 0.6); color: #CF9D7B; font-family: inherit; resize: vertical;">{% if action == 'edit' %}{{ book.description or '' }}{% endif %}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="authors">Авторы *</label>
+                <textarea id="authors" name="authors" rows="4" placeholder="Введите авторов (по одному на строку):&#10;Лев Толстой&#10;Достоевский, Фёдор&#10;Александр Пушкин" required style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: 6px; background-color: rgba(58, 53, 52, 0.6); color: #CF9D7B; font-family: inherit; resize: vertical;">{% if action == 'edit' %}{{ book.authors_text }}{% endif %}</textarea>
+                <small style="color: var(--text-light); font-size: 0.875rem; display: block; margin-top: 0.5rem;">
+                    Формат: "Имя Фамилия" или "Фамилия, Имя". Каждый автор с новой строки.
+                </small>
+            </div>
+            
+            <div class="form-group">
+                <label for="genres">Жанры *</label>
+                <textarea id="genres" name="genres" rows="4" placeholder="Введите жанры (по одному на строку):&#10;Фантастика&#10;Детектив&#10;Классика" required style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: 6px; background-color: rgba(58, 53, 52, 0.6); color: #CF9D7B; font-family: inherit; resize: vertical;">{% if action == 'edit' %}{{ book.genres_text }}{% endif %}</textarea>
+                <small style="color: var(--text-light); font-size: 0.875rem; display: block; margin-top: 0.5rem;">
+                    Каждый жанр с новой строки.
+                </small>
+            </div>
+            
+            <div style="display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-primary btn-block">{% if action == 'add' %}Добавить{% else %}Сохранить{% endif %}</button>
+                {% if action == 'edit' %}
+                <a href="{{ url_for('book_detail', book_id=book.book_id) }}" class="btn btn-outline btn-block">Отмена</a>
+                {% else %}
+                <a href="{{ url_for('books') }}" class="btn btn-outline btn-block">Отмена</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

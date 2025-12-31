@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}{% if action == 'add' %}Добавление пользователя{% else %}Редактирование пользователя{% endif %} - BookNest{% endblock %}
+
+{% block content %}
+<div class="admin-page">
+    <h1>{% if action == 'add' %}Добавление пользователя{% else %}Редактирование пользователя{% endif %}</h1>
+    
+    <div class="login-card" style="max-width: 600px; margin: 0 auto;">
+        <form method="POST" class="login-form">
+            <div class="form-group">
+                <label for="username">Логин</label>
+                <input type="text" id="username" name="username" value="{% if action == 'edit' %}{{ user.username }}{% endif %}" {% if action == 'edit' %}readonly{% else %}required{% endif %}>
+                {% if action == 'edit' %}<small style="color: var(--text-light);">Логин нельзя изменить</small>{% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="{% if action == 'edit' %}{{ user.email }}{% endif %}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="full_name">Полное имя</label>
+                <input type="text" id="full_name" name="full_name" value="{% if action == 'edit' %}{{ user.full_name }}{% endif %}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Телефон</label>
+                <input type="text" id="phone" name="phone" value="{% if action == 'edit' %}{{ user.phone or '' }}{% endif %}">
+            </div>
+            
+            <div class="form-group">
+                <label for="card_number">Номер читательского билета</label>
+                <input type="text" id="card_number" name="card_number" value="{% if action == 'edit' %}{{ user.card_number or '' }}{% endif %}">
+            </div>
+            
+            <div class="form-group">
+                <label for="role">Роль</label>
+                <select id="role" name="role" class="form-select" required>
+                    <option value="reader" {% if action == 'edit' and user.role == 'reader' %}selected{% endif %}>Читатель</option>
+                    <option value="librarian" {% if action == 'edit' and user.role == 'librarian' %}selected{% endif %}>Библиотекарь</option>
+                    <option value="admin" {% if action == 'edit' and user.role == 'admin' %}selected{% endif %}>Администратор</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="max_books">Максимальное количество книг</label>
+                <input type="number" id="max_books" name="max_books" value="{% if action == 'edit' %}{{ user.max_books }}{% else %}5{% endif %}" min="1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Пароль{% if action == 'edit' %} (оставьте пустым, чтобы не менять){% endif %}</label>
+                <input type="password" id="password" name="password" {% if action == 'add' %}required{% endif %}>
+            </div>
+            
+            <div style="display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-primary btn-block">{% if action == 'add' %}Добавить{% else %}Сохранить{% endif %}</button>
+                <a href="{{ url_for('admin_users') }}" class="btn btn-outline btn-block">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

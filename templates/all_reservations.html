@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Бронирования - BookNest{% endblock %}
+
+{% block content %}
+<div class="reservations-page">
+    <a href="{{ url_for('dashboard') }}" class="back-link">← Назад на главную</a>
+    <h1>Все бронирования</h1>
+    
+    <div class="filters">
+        <form method="GET" action="{{ url_for('all_reservations') }}" class="filter-form">
+            <select name="status" class="form-select">
+                <option value="">Все статусы</option>
+                <option value="reserved" {% if status_filter == 'reserved' %}selected{% endif %}>Забронировано</option>
+                <option value="issued" {% if status_filter == 'issued' %}selected{% endif %}>Выдано</option>
+                <option value="returned" {% if status_filter == 'returned' %}selected{% endif %}>Возвращено</option>
+                <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Отменено</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Фильтровать</button>
+            <a href="{{ url_for('all_reservations') }}" class="btn btn-outline">Сбросить</a>
+        </form>
+    </div>
+    
+    {% if reservations %}
+    <table class="reservations-table">
+        <thead>
+            <tr>
+                <th>Книга</th>
+                <th>Читатель</th>
+                <th>Инвентарный номер</th>
+                <th>Дата бронирования</th>
+                <th>Срок получения</th>
+                <th>Срок возврата</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for res in reservations %}
+            <tr>
+                <td>{{ res.title }}</td>
+                <td>{{ res.full_name }}<br><small>{{ res.username }}</small></td>
+                <td>{{ res.inventory_number }}</td>
+                <td>{{ res.reservation_date.strftime('%d.%m.%Y %H:%M') if res.reservation_date else 'N/A' }}</td>
+                <td>{{ res.pickup_deadline.strftime('%d.%m.%Y %H:%M') if res.pickup_deadline else 'N/A' }}</td>
+                <td>{{ res.due_date.strftime('%d.%m.%Y') if res.due_date else 'N/A' }}</td>
+                <td>
+                    {% if res.status == 'reserved' %}
+                    <span class="badge badge-warning">Забронировано</span>
+                    {% elif res.status == 'issued' %}
+                    <span class="badge badge-info">Выдано</span>
+                    {% elif res.status == 'returned' %}
+                    <span class="badge badge-success">Возвращено</span>
+                    {% elif res.status == 'cancelled' %}
+                    <span class="badge badge-secondary">Отменено</span>
+                    {% else %}
+                    <span class="badge">{{ res.status }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="POST" action="{{ url_for('update_reservation_status', copy_id=res.copy_id, username=res.username) }}" style="display: inline;">
+                        <input type="hidden" name="reservation_date" value="{{ res.reservation_date }}">
+                        <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                            <option value="reserved" {% if res.status == 'reserved' %}selected{% endif %}>Забронировано</option>
+                            <option value="issued" {% if res.status == 'issued' %}selected{% endif %}>Выдано</option>
+                            <option value="returned" {% if res.status == 'returned' %}selected{% endif %}>Возвращено</option>
+                            <option value="cancelled" {% if res.status == 'cancelled' %}selected{% endif %}>Отменено</option>
+                        </select>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <p>Бронирования не найдены</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BookNest - Библиотечная система{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    {% if session.username %}
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>🦉 BookNest</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="{{ url_for('dashboard') }}" class="nav-link">Главная</a>
+                <a href="{{ url_for('books') }}" class="nav-link">Книги</a>
+                {% if session.role == 'reader' %}
+                <a href="{{ url_for('my_reservations') }}" class="nav-link">Мои бронирования</a>
+                {% elif session.role in ['librarian', 'admin'] %}
+                <a href="{{ url_for('all_reservations') }}" class="nav-link">Бронирования</a>
+                {% endif %}
+                {% if session.role == 'admin' %}
+                <a href="{{ url_for('admin_statistics') }}" class="nav-link">Статистика</a>
+                <a href="{{ url_for('admin_users') }}" class="nav-link">Пользователи</a>
+                {% endif %}
+                <div class="nav-user">
+                    <span>{{ session.full_name }}</span>
+                    <span class="role-badge">{{ session.role }}</span>
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline">Выход</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 BookNest - Система управления библиотекой</p>
+        </div>
+    </footer>
+</body>
+</html>
+

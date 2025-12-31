@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Главная - BookNest{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>Добро пожаловать, {{ session.full_name }}!</h1>
+    
+    {% if session.role == 'reader' %}
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-info">
+                <h3>{{ active_reservations }}</h3>
+                <p>Активных бронирований</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📖</div>
+            <div class="stat-info">
+                <h3>{{ max_books }}</h3>
+                <p>Максимум книг</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="quick-actions">
+        <a href="{{ url_for('books') }}" class="action-card">
+            <h3>🔍 Поиск книг</h3>
+            <p>Найти и забронировать книги</p>
+        </a>
+        <a href="{{ url_for('my_reservations') }}" class="action-card">
+            <h3>📋 Мои бронирования</h3>
+            <p>Управление вашими бронированиями</p>
+        </a>
+    </div>
+    
+    {% elif session.role in ['librarian', 'admin'] %}
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-info">
+                <h3>{{ stats.total_books }}</h3>
+                <p>Всего книг</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+                <h3>{{ stats.available_copies }}</h3>
+                <p>Доступных экземпляров</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-info">
+                <h3>{{ stats.pending_reservations }}</h3>
+                <p>Ожидающих бронирований</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+                <h3>{{ stats.total_readers }}</h3>
+                <p>Читателей</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="quick-actions">
+        <a href="{{ url_for('books') }}" class="action-card">
+            <h3>📚 Каталог книг</h3>
+            <p>Просмотр всех книг</p>
+        </a>
+        <a href="{{ url_for('all_reservations') }}" class="action-card">
+            <h3>📋 Бронирования</h3>
+            <p>Управление бронированиями</p>
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

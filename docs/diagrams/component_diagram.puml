@@ -1,0 +1,45 @@
+@startuml
+title Диаграмма компонентов: Архитектура BookNest
+
+package "BookNest System" {
+  component "Web Interface" as WebUI
+  component "Business Logic" as Business
+  component "Static Files" as Static
+  component "Data Access" as Data
+  database "PostgreSQL DB" as DB
+}
+
+component "Templates" as Templates #lightblue
+component "main.py" as Main #lightgreen
+component "db.py" as DBModule #lightyellow
+
+Templates -[hidden]- WebUI
+Main -[hidden]- Business
+DBModule -[hidden]- Data
+
+note right of WebUI
+  base.html
+  login.html
+  books.html
+  dashboard.html
+  my_reservations.html
+end note
+
+note right of Business
+  Routes
+  Decorators
+  Session Management
+end note
+
+note right of Data
+  Database class
+  Query methods
+end note
+
+WebUI --> Business : использует
+Static --> WebUI : стилизует
+Business --> Data : обращается
+Data --> DB : запросы
+
+@enduml
+
