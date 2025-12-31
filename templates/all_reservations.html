@@ -38,13 +38,13 @@
         <tbody>
             {% for res in reservations %}
             <tr>
-                <td>{{ res.title }}</td>
-                <td>{{ res.full_name }}<br><small>{{ res.username }}</small></td>
-                <td>{{ res.inventory_number }}</td>
-                <td>{{ res.reservation_date.strftime('%d.%m.%Y %H:%M') if res.reservation_date else 'N/A' }}</td>
-                <td>{{ res.pickup_deadline.strftime('%d.%m.%Y %H:%M') if res.pickup_deadline else 'N/A' }}</td>
-                <td>{{ res.due_date.strftime('%d.%m.%Y') if res.due_date else 'N/A' }}</td>
-                <td>
+                <td data-label="Книга">{{ res.title }}</td>
+                <td data-label="Читатель">{{ res.full_name }}<br><small>{{ res.username }}</small></td>
+                <td data-label="Инвентарный номер">{{ res.inventory_number }}</td>
+                <td data-label="Дата бронирования">{{ res.reservation_date.strftime('%d.%m.%Y %H:%M') if res.reservation_date else 'N/A' }}</td>
+                <td data-label="Срок получения">{{ res.pickup_deadline.strftime('%d.%m.%Y %H:%M') if res.pickup_deadline else 'N/A' }}</td>
+                <td data-label="Срок возврата">{{ res.due_date.strftime('%d.%m.%Y') if res.due_date else 'N/A' }}</td>
+                <td data-label="Статус">
                     {% if res.status == 'reserved' %}
                     <span class="badge badge-warning">Забронировано</span>
                     {% elif res.status == 'issued' %}
@@ -57,10 +57,10 @@
                     <span class="badge">{{ res.status }}</span>
                     {% endif %}
                 </td>
-                <td>
+                <td data-label="Действия">
                     <form method="POST" action="{{ url_for('update_reservation_status', copy_id=res.copy_id, username=res.username) }}" style="display: inline;">
                         <input type="hidden" name="reservation_date" value="{{ res.reservation_date }}">
-                        <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" style="width: 100%;">
                             <option value="reserved" {% if res.status == 'reserved' %}selected{% endif %}>Забронировано</option>
                             <option value="issued" {% if res.status == 'issued' %}selected{% endif %}>Выдано</option>
                             <option value="returned" {% if res.status == 'returned' %}selected{% endif %}>Возвращено</option>

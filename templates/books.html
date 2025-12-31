@@ -5,7 +5,7 @@
 {% block content %}
 <div class="books-page">
     <a href="{{ url_for('dashboard') }}" class="back-link">← Назад на главную</a>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div class="books-page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
         <h1 style="margin: 0;">Каталог книг</h1>
         {% if session.role == 'admin' %}
         <a href="{{ url_for('admin_add_book') }}" class="btn btn-primary">Добавить книгу</a>

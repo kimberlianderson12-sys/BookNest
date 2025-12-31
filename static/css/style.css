@@ -668,17 +668,25 @@ main {
     max-width: 900px;
 }
 
-.back-link {
-    color: var(--primary-color);
-    text-decoration: none;
-    margin-bottom: 1rem;
-    display: inline-block;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--primary-color);
-    border-radius: 6px;
-    transition: all 0.2s;
-}
+    .back-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        margin-bottom: 1rem;
+        display: inline-block;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--primary-color);
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+    
+    @media (max-width: 768px) {
+        .back-link {
+            width: 100%;
+            text-align: center;
+            padding: 0.75rem 1rem;
+        }
+    }
 
 .back-link:hover {
     background-color: var(--primary-color);
@@ -960,41 +968,402 @@ main {
     background-image: linear-gradient(to bottom, #162127 0%, #0C1519 100%);
 }
 
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.2s;
+}
+
+.mobile-menu-toggle:hover {
+    color: var(--primary-color);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    /* Navbar mobile */
+    .navbar .container {
+        flex-wrap: wrap;
+    }
+    
+    .nav-brand h1 {
+        font-size: 1.5rem;
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+        order: 2;
+    }
+    
     .nav-menu {
+        display: none;
         flex-direction: column;
-        gap: 1rem;
+        width: 100%;
+        order: 3;
+        gap: 0.75rem;
+        padding: 1rem 0;
+        border-top: 2px solid var(--border-color);
+        margin-top: 1rem;
+    }
+    
+    .nav-menu.active {
+        display: flex;
+    }
+    
+    .nav-menu .nav-link {
+        padding: 0.75rem;
+        border-bottom: 1px solid var(--border-color);
     }
     
     .nav-user {
         flex-direction: column;
+        width: 100%;
+        gap: 0.75rem;
+        align-items: stretch;
+    }
+    
+    .nav-user span {
+        text-align: center;
+    }
+    
+    .role-badge {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .nav-user .btn {
+        width: 100%;
+    }
+    
+    /* Main content */
+    main {
+        padding: 1rem 0;
+    }
+    
+    /* Headings */
+    h1 {
+        font-size: 1.5rem !important;
+    }
+    
+    .dashboard h1,
+    .books-page h1,
+    .reservations-page h1 {
+        font-size: 1.5rem !important;
+        margin-bottom: 1rem;
+    }
+    
+    /* Stats grid */
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .stat-icon {
+        font-size: 2rem;
+    }
+    
+    .stat-info h3 {
+        font-size: 1.5rem;
+    }
+    
+    /* Quick actions */
+    .quick-actions {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .action-card {
+        padding: 1.5rem;
+    }
+    
+    /* Books grid */
+    .books-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .book-card {
+        padding: 1rem;
+    }
+    
+    .book-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .book-image-container {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+        aspect-ratio: 2/3;
+        margin: 0 auto;
+    }
+    
+    .book-header {
+        flex-direction: column;
+        align-items: flex-start;
         gap: 0.5rem;
     }
     
-    .stats-grid {
-        grid-template-columns: 1fr;
+    .book-header h3 {
+        font-size: 1rem;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
     }
     
-    .books-grid {
-        grid-template-columns: 1fr;
+    /* Search filters */
+    .search-filters {
+        padding: 1rem;
     }
     
     .form-row {
         flex-direction: column;
+        gap: 0.75rem;
     }
     
     .form-row .form-group {
         width: 100%;
+        min-width: unset;
+        margin-bottom: 0;
     }
     
-    .reservations-table {
+    .search-buttons {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .search-buttons .btn {
+        width: 100%;
+    }
+    
+    /* Books page header */
+    .books-page-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+    
+    .books-page-header .btn {
+        width: 100%;
+    }
+    
+    /* Book detail */
+    .book-detail-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1rem;
+    }
+    
+    .book-detail-header h1 {
+        width: 100%;
+        font-size: 1.5rem !important;
+    }
+    
+    .book-detail-header > div {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .book-detail-header .btn {
+        width: 100%;
+    }
+    
+    .book-detail-content {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .book-detail-image-section {
+        width: 100%;
+        max-width: 250px;
+        margin: 0 auto;
+    }
+    
+    .book-info-section {
+        min-width: unset;
+        width: 100%;
+    }
+    
+    .info-list {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .info-list dt {
+        font-weight: 700;
+        margin-top: 0.75rem;
+    }
+    
+    .info-list dt:first-child {
+        margin-top: 0;
+    }
+    
+    /* Tables - convert to cards on mobile */
+    .reservations-table,
+    .copies-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .reservations-table thead,
+    .copies-table thead {
+        display: none;
+    }
+    
+    .reservations-table tbody,
+    .copies-table tbody {
+        display: block;
+    }
+    
+    .reservations-table tr,
+    .copies-table tr {
+        display: block;
+        background-color: var(--card-bg);
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        box-shadow: var(--shadow);
+    }
+    
+    .reservations-table td,
+    .copies-table td {
+        display: block;
+        padding: 0.5rem 0;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .reservations-table td:last-child,
+    .copies-table td:last-child {
+        border-bottom: none;
+    }
+    
+    .reservations-table td::before,
+    .copies-table td::before {
+        content: attr(data-label) ": ";
+        font-weight: 600;
+        color: var(--text-color);
+        display: inline-block;
+        min-width: 140px;
+    }
+    
+    .reservations-table td:last-child::before,
+    .copies-table td:last-child::before {
+        content: "";
+        min-width: 0;
+    }
+    
+    .reservations-table td:last-child form,
+    .copies-table td:last-child form {
+        width: 100%;
+    }
+    
+    .reservations-table td:last-child .form-select,
+    .copies-table td:last-child .form-select {
+        width: 100%;
+    }
+    
+    /* Filter form */
+    .filter-form,
+    .filters .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+    
+    .filter-form label,
+    .filters .filter-form label {
+        margin-bottom: 0.25rem;
+    }
+    
+    .filter-form .form-select,
+    .filters .filter-form .form-select {
+        width: 100%;
+        min-width: unset;
+    }
+    
+    .filter-form .btn,
+    .filters .filter-form .btn {
+        width: 100%;
+    }
+    
+    .filters {
+        padding: 1rem;
+    }
+    
+    /* Buttons */
+    .btn {
         font-size: 0.875rem;
+        padding: 0.75rem 1rem;
+        height: auto;
+        min-height: 44px;
     }
     
-    .reservations-table th,
-    .reservations-table td {
-        padding: 0.5rem;
+    .btn-sm {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8125rem;
+        min-height: 36px;
+    }
+    
+    /* Login */
+    .login-card {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .login-header h1 {
+        font-size: 2rem;
+    }
+    
+    /* Empty state */
+    .empty-state {
+        padding: 2rem 1rem;
+    }
+    
+    /* Footer */
+    .footer {
+        padding: 1rem 0;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 10px;
+    }
+    
+    .nav-brand h1 {
+        font-size: 1.25rem;
+    }
+    
+    h1 {
+        font-size: 1.25rem !important;
+    }
+    
+    .book-card {
+        padding: 0.75rem;
+    }
+    
+    .search-filters {
+        padding: 0.75rem;
+    }
+    
+    .book-detail-content {
+        padding: 0.75rem;
     }
 }
 

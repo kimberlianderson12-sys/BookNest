@@ -13,7 +13,8 @@
             <div class="nav-brand">
                 <h1>🦉 BookNest</h1>
             </div>
-            <div class="nav-menu">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Меню">☰</button>
+            <div class="nav-menu" id="navMenu">
                 <a href="{{ url_for('dashboard') }}" class="nav-link">Главная</a>
                 <a href="{{ url_for('books') }}" class="nav-link">Книги</a>
                 {% if session.role == 'reader' %}
@@ -54,6 +55,30 @@
             <p>&copy; 2026 BookNest - Система управления библиотекой</p>
         </div>
     </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (mobileMenuToggle && navMenu) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    this.textContent = navMenu.classList.contains('active') ? '✕' : '☰';
+                });
+                
+                // Close menu when clicking on a link
+                const navLinks = navMenu.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        navMenu.classList.remove('active');
+                        mobileMenuToggle.textContent = '☰';
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>
 

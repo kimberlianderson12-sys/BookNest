@@ -117,8 +117,8 @@
                 <tbody>
                     {% for copy in copies %}
                     <tr>
-                        <td>{{ copy[1] }}</td>
-                        <td>
+                        <td data-label="Инвентарный номер">{{ copy[1] }}</td>
+                        <td data-label="Состояние">
                             {% if copy[2] == 'new' %}Новая
                             {% elif copy[2] == 'good' %}Хорошее
                             {% elif copy[2] == 'fair' %}Удовлетворительное
@@ -126,9 +126,9 @@
                             {% else %}{{ copy[2] }}
                             {% endif %}
                         </td>
-                        <td>{{ copy[4] or 'Не указано' }}</td>
+                        <td data-label="Местоположение">{{ copy[4] or 'Не указано' }}</td>
                         {% if session.role == 'reader' %}
-                        <td>
+                        <td data-label="Действие">
                             <form method="POST" action="{{ url_for('reserve_book', copy_id=copy[0]) }}" style="display: inline;">
                                 <button type="submit" class="btn btn-primary btn-sm">Забронировать</button>
                             </form>

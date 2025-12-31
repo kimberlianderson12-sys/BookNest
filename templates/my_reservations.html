@@ -40,12 +40,12 @@
         <tbody>
             {% for res in reservations %}
             <tr>
-                <td>{{ res.title }}</td>
-                <td>{{ res.inventory_number }}</td>
-                <td>{{ res.reservation_date.strftime('%d.%m.%Y %H:%M') if res.reservation_date else 'N/A' }}</td>
-                <td>{{ res.pickup_deadline.strftime('%d.%m.%Y %H:%M') if res.pickup_deadline else 'N/A' }}</td>
-                <td>{{ res.due_date.strftime('%d.%m.%Y') if res.due_date else 'N/A' }}</td>
-                <td>
+                <td data-label="Книга">{{ res.title }}</td>
+                <td data-label="Инвентарный номер">{{ res.inventory_number }}</td>
+                <td data-label="Дата бронирования">{{ res.reservation_date.strftime('%d.%m.%Y %H:%M') if res.reservation_date else 'N/A' }}</td>
+                <td data-label="Срок получения">{{ res.pickup_deadline.strftime('%d.%m.%Y %H:%M') if res.pickup_deadline else 'N/A' }}</td>
+                <td data-label="Срок возврата">{{ res.due_date.strftime('%d.%m.%Y') if res.due_date else 'N/A' }}</td>
+                <td data-label="Статус">
                     {% if res.status == 'reserved' %}
                     <span class="badge badge-warning">Забронировано</span>
                     {% elif res.status == 'issued' %}
@@ -58,7 +58,7 @@
                     <span class="badge">{{ res.status }}</span>
                     {% endif %}
                 </td>
-                <td>
+                <td data-label="Действия">
                     {% if res.status == 'reserved' or res.status == 'issued' %}
                     <form method="POST" action="{{ url_for('cancel_reservation', copy_id=res.copy_id) }}" style="display: inline;">
                         <input type="hidden" name="reservation_date" value="{{ res.reservation_date.isoformat() if res.reservation_date else '' }}">
@@ -67,6 +67,8 @@
                             Отменить
                         </button>
                     </form>
+                    {% else %}
+                    <span style="color: var(--text-light);">—</span>
                     {% endif %}
                 </td>
             </tr>
