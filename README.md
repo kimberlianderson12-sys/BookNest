@@ -22,9 +22,6 @@ CREATE DATABASE library_db;
 ```
 
 3. Создайте таблицы (выполните `shema.sql`):
-```bash
-psql -U postgres -d library_db -f shema.sql
-```
 
 4. Импортируйте данные:
 ```bash
@@ -59,39 +56,5 @@ python main.py
 - 📋 Управление всеми бронированиями
 - ✅ Изменение статусов бронирований (забронировано → выдано → возвращено)
 
-## 🗂️ Структура проекта
 
-```
-BookNest/
-├── main.py              # Flask приложение
-├── db.py                # Класс для работы с БД
-├── import_module.py     # Импорт данных из Excel
-├── shema.sql           # Схема базы данных
-├── requirements.txt    # Зависимости Python
-├── templates/          # HTML шаблоны
-│   ├── base.html
-│   ├── login.html
-│   ├── dashboard.html
-│   ├── books.html
-│   ├── book_detail.html
-│   ├── my_reservations.html
-│   └── all_reservations.html
-└── static/
-    └── css/
-        └── style.css   # Стили
-```
-
-## 🔧 Настройка
-
-В файле `db.py` можно изменить параметры подключения к БД:
-- `host` - хост БД (по умолчанию: localhost)
-- `database` - имя БД (по умолчанию: library_db)
-- `user` - пользователь БД (по умолчанию: postgres)
-- `password` - пароль БД (по умолчанию: 1234)
-
-## 📝 Примечания
-
-- Приложение использует сессии Flask для аутентификации
-- Пароли хранятся в открытом виде (для продакшена рекомендуется хеширование)
-- Все даты обрабатываются в формате PostgreSQL
 
